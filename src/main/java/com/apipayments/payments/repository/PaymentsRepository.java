@@ -12,5 +12,8 @@ import java.util.UUID;
 @Repository
 public interface PaymentsRepository extends JpaRepository<Payments, UUID> {
 
+    boolean existsByPayerDocument(String document);
+
+
 
 }

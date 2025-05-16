@@ -10,6 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 
 @RestController
@@ -27,16 +30,22 @@ public class PaymentsController {
     private final PaymentsService service;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> createPayment(@RequestBody @Valid PaymentsDto payDto) {
-        Payments payments = payDto.mapearPayment(payDto);
-        service.validationPayments(payments);
+    public ResponseEntity<Object>createPayment(@RequestBody @Valid PaymentsDto payDto) {
+        try {
 
-        ResponseDto respostaDto = new ResponseDto("Pagamento Criado! ", payDto);
+            Payments payments = payDto.mapearPayment(payDto);
+            service.validationPayments(payments);
 
 
-//        return new ResponseEntity<>(respostaDto,  HttpStatus.CREATED);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(payments.getId()).toUri();
 
-        return ResponseEntity.ok(respostaDto);
+            ResponseDto respostaDto = new ResponseDto("Pagamento Criado! ", payDto);
+
+            return ResponseEntity.ok(respostaDto);
+
+        }catch (RuntimeException e) {
+            return  ResponseEntity.badRequest().body(new ResponseDto("Campo Invalido!", payDto));
+        }
 
     }
 

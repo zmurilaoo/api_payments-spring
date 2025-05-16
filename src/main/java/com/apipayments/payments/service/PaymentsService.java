@@ -25,18 +25,14 @@ public class PaymentsService {
 
 
 
-    public ResponseEntity<ResponseDto> validationPayments(Payments pay) {
+    public void validationPayments(Payments pay) {
 
             if (pay.getAmount().compareTo(BigDecimal.ZERO) <= 0.0) {
                 throw new ValidationPayments("O valor não pode ser zero! ");
             }
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(pay.getId()).toUri();
-
 
             repository.save(pay);
-
-            return ResponseEntity.created(location).build();
 
     }
 
