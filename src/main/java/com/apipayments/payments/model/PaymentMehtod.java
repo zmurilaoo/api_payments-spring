@@ -1,7 +1,8 @@
 package com.apipayments.payments.model;
 
-public enum paymentMehtod {
+public enum PaymentMehtod {
     PIX,
     BOLETO,
-    CONCLUIDO
+    CRÉDITO,
+    NUPAY
 }

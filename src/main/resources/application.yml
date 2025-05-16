@@ -2,12 +2,14 @@ spring:
   application:
     name: payments
   datasource:
-    url: jdbc:postgresql://localhost:5490/payments
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5471/payments
+    username: vencer
+    password: vencer
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      show-sql: true
-      ddl-auto: update
+      ddl-auto: update  # Ok para dev, troque para 'validate' ou 'none' em produção
+    show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    properties:
+#    open-in-view: false  # Recomendado para evitar problemas de performanc
