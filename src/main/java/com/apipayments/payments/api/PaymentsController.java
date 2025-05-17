@@ -44,7 +44,7 @@ public class PaymentsController {
             return ResponseEntity.ok(respostaDto);
 
         }catch (RuntimeException e) {
-            return  ResponseEntity.badRequest().body(new ResponseDto("Campo Invalido!", payDto));
+            return  ResponseEntity.badRequest().body(new ResponseDto("Já existe um pagamento com esse nome e documento!", payDto));
         }
 
     }
@@ -78,8 +78,5 @@ public class PaymentsController {
            return ResponseEntity.badRequest().body(new ResponseDto("Pagamento não encontrado", paydto));
         }
     }
-
-
-
 
 }

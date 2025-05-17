@@ -6,13 +6,11 @@ import com.apipayments.payments.dto.ResponseDto;
 import com.apipayments.payments.execeptions.ValidationPayments;
 import com.apipayments.payments.model.Payments;
 import com.apipayments.payments.repository.PaymentsRepository;
+import com.apipayments.payments.validator.ValidationField;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,18 +20,18 @@ import java.util.UUID;
 public class PaymentsService {
 
     private final PaymentsRepository repository;
-
+    private final ValidationField validation;
 
 
     public void validationPayments(Payments pay) {
 
-            if (pay.getAmount().compareTo(BigDecimal.ZERO) <= 0.0) {
-                throw new ValidationPayments("O valor não pode ser zero! ");
-            }
+        validation.isvalid(pay);
 
+        if (pay.getAmount().compareTo(BigDecimal.ZERO) <= 0.0) {
+            throw new ValidationPayments("O valor não pode ser zero! ");
+        }
 
-            repository.save(pay);
-
+        repository.save(pay);
     }
 
     public ResponseDto pegar(String id) {

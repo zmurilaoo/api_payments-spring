@@ -1,15 +1,15 @@
 package com.apipayments.payments.model;
 
 
+import com.apipayments.payments.enums.PaymentMehtod;
+import com.apipayments.payments.enums.StatusPayment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;

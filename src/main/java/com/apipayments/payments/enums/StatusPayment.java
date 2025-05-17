@@ -1,4 +1,4 @@
-package com.apipayments.payments.model;
+package com.apipayments.payments.enums;
 
 public enum StatusPayment {
     PENDENTE,
