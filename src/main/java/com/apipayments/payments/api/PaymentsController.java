@@ -29,6 +29,7 @@ public class PaymentsController {
 
     private final PaymentsService service;
 
+
     @PostMapping
     public ResponseEntity<Object>createPayment(@RequestBody @Valid PaymentsDto payDto) {
         try {
@@ -64,8 +65,6 @@ public class PaymentsController {
         } catch (ValidationPayments e ) {
             return ResponseEntity.notFound().build();
         }
-
-
     }
 
     @PutMapping({"{id}"})

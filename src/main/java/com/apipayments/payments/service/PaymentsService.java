@@ -68,8 +68,6 @@ public class PaymentsService {
         if (alterar.isPresent()) {
             Payments pay =  new Payments();
             pay.setPayNamer(paydto.payNamer());
-            pay.setPayerDocument(paydto.payerDocument());
-
             repository.save(pay);
 
         }

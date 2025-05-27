@@ -14,6 +14,8 @@ public interface PaymentsRepository extends JpaRepository<Payments, UUID> {
 
 //   boolean existsByPayNamerAndPayerDocument(String payNamer, String payerDocument);
 
-   Optional<Payments> findByPayNamerAndPayerDocument(String payNamer, String payerDocument);
+
+
+   Optional<Payments> findByPayNamerPayerDocument(String payNamer, String payDocument);
 
 }

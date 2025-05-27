@@ -17,7 +17,7 @@ public class ValidationField {
 
     public void isvalid(Payments pay) {
         if (validDuplication(pay)) {
-            throw new ValidationPayments("");
+            throw new ValidationPayments("Já existe um pagamento com esse nome e documento!");
         }
 
     }
@@ -25,15 +25,19 @@ public class ValidationField {
 
     public boolean validDuplication(Payments pay) {
 
-        Optional<Payments> existing = repository.findByPayNamerAndPayerDocument(pay.getPayNamer(), pay.getPayerDocument());
+        Optional<Payments> existing = repository.findByPayNamerPayerDocument(pay.getPayNamer(), pay.getPayerDocument());
+
+        if (existing == null) {
+            existing.isPresent();
+        }
+
 
         if (existing.isPresent() && !existing.get().getId().equals(pay.getId())) {
             throw new ValidationPayments("Já existe um pagamento com esse nome e documento!");
         }
 
+
         return false;
-
-
 
     }
 
