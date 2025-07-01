@@ -1,10 +1,9 @@
 package com.apipayments.payments.validator;
 
 import com.apipayments.payments.execeptions.ValidationPayments;
-import com.apipayments.payments.model.Payments;
+import com.apipayments.payments.domain.payments.Payments;
 import com.apipayments.payments.repository.PaymentsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.expression.spel.ast.OpPlus;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -19,23 +18,16 @@ public class ValidationField {
         if (validDuplication(pay)) {
             throw new ValidationPayments("Já existe um pagamento com esse nome e documento!");
         }
-
     }
 
 
     public boolean validDuplication(Payments pay) {
 
-        Optional<Payments> existing = repository.findByPayNamerPayerDocument(pay.getPayNamer(), pay.getPayerDocument());
-
-        if (existing == null) {
-            existing.isPresent();
-        }
-
+        Optional<Payments> existing = repository.findByPayNamerAndPayerDocument(pay.getPayNamer(), pay.getPayerDocument());
 
         if (existing.isPresent() && !existing.get().getId().equals(pay.getId())) {
             throw new ValidationPayments("Já existe um pagamento com esse nome e documento!");
         }
-
 
         return false;
 

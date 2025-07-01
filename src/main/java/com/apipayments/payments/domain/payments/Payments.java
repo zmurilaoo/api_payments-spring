@@ -1,12 +1,8 @@
-package com.apipayments.payments.model;
+package com.apipayments.payments.domain.payments;
 
 
 import com.apipayments.payments.enums.PaymentMehtod;
-import com.apipayments.payments.enums.StatusPayment;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,24 +27,15 @@ public class Payments {
 
 
     @Column(name = "name_payment", nullable = false)
-    @Size(max = 30, message = "O nome só pode conter 30 caracters.")
-    @NotNull
     private String payNamer;
 
 
-    @Size(max = 20, message = "O documento só pode conter 20 caracters.")
     @Column(name = "document_payment", nullable = false)
-    @NotBlank
     private String payerDocument;
 
 
     @Column(name = "ammount", precision = 18, scale = 2, nullable = false)
-    @NotNull
     private BigDecimal amount;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_payment")
-    private StatusPayment statusPayment;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "method_payment")
@@ -66,6 +53,12 @@ public class Payments {
     @LastModifiedDate
     @Column(name = "date_update")
     private LocalDateTime dataUpdate;
+
+    public Payments(PaymentsRequestDto payDto) {
+        this.payNamer = payDto.payName();
+        this.amount = payDto.amount();
+        this.paymentMethod = payDto.paymentMethod();
+    }
 
 
 }

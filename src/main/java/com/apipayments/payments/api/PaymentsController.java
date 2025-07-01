@@ -1,18 +1,14 @@
 package com.apipayments.payments.api;
 
-import com.apipayments.payments.dto.PaymentsDto;
-import com.apipayments.payments.dto.ResponseDto;
-import com.apipayments.payments.execeptions.ValidationPayments;
-import com.apipayments.payments.model.Payments;
+import com.apipayments.payments.domain.payments.PaymentsResponseDto;
+import com.apipayments.payments.domain.payments.RespostSucess;
+import com.apipayments.payments.domain.payments.Payments;
 import com.apipayments.payments.repository.PaymentsRepository;
 import com.apipayments.payments.service.PaymentsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 
 @RestController
@@ -20,8 +16,6 @@ import java.net.URI;
 @RequiredArgsConstructor
 
 ///Adicionar Validador de duplicações tanto de nome
-
-
 
 public class PaymentsController {
 
@@ -31,27 +25,21 @@ public class PaymentsController {
 
 
     @PostMapping
-    public ResponseEntity<Object>createPayment(@RequestBody @Valid PaymentsDto payDto) {
-        try {
+    public ResponseEntity<RespostSucess>createPayment(@RequestBody @Valid Payments pay) {
 
-            Payments payments = payDto.mapearPayment(payDto);
-            service.validationPayments(payments);
+            service.validationPayments(pay);
 
+            PaymentsResponseDto payDto =  new PaymentsResponseDto(pay);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(payments.getId()).toUri();
+            RespostSucess respost = new RespostSucess("Pagamento Criado", payDto);
+//            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(pay.getId()).toUri();
 
-            ResponseDto respostaDto = new ResponseDto("Pagamento Criado! ", payDto);
-
-            return ResponseEntity.ok(respostaDto);
-
-        }catch (RuntimeException e) {
-            return  ResponseEntity.badRequest().body(new ResponseDto("Já existe um pagamento com esse nome e documento!", payDto));
-        }
+            return ResponseEntity.ok(respost);
 
     }
 
     @GetMapping({"/{id}"})
-    public ResponseEntity<ResponseDto> getPagamento(@PathVariable("id") @Valid String id ){
+    public ResponseEntity<RespostSucess> getPagamento(@PathVariable("id") @Valid String id ){
         var trazer = service.pegar(id);
         return ResponseEntity.ok(trazer);
 
@@ -59,23 +47,19 @@ public class PaymentsController {
 
     @DeleteMapping({"{id}"})
     public ResponseEntity<Void> deletePayments(@PathVariable("id") @Valid String id) {
-        try {
             service.delete(id);
             return ResponseEntity.ok().build();
-        } catch (ValidationPayments e ) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
-    @PutMapping({"{id}"})
-    public ResponseEntity<ResponseDto>  update (@PathVariable("id") String id, @RequestBody PaymentsDto paydto) {
-        try {
-            service.update(id, paydto);
-            ResponseDto responseDto = new ResponseDto("Pagamento Atualizado", paydto);
-            return ResponseEntity.ok(responseDto);
-        } catch (ValidationPayments e) {
-           return ResponseEntity.badRequest().body(new ResponseDto("Pagamento não encontrado", paydto));
-        }
-    }
+//    @PutMapping({"{id}"})
+//    public ResponseEntity<PaymentsResponseDto>  update (@PathVariable("id") @Valid  String id, @RequestBody PaymentsRequestDto paydto) {
+//        try {
+//            service.update(id, paydto);
+//            PaymentsResponseDto responseDto = new PaymentsResponseDto("Pagamento Atualizado", paydto);
+//            return ResponseEntity.ok(responseDto);
+//        } catch (ValidationPayments e) {
+//           return ResponseEntity.badRequest().body(new PaymentsResponseDto("Pagamento não encontrado", paydto));
+//        }
+//    }
 
 }
